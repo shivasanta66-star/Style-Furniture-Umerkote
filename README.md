@@ -62,8 +62,8 @@ on the page as written. Search `index.html` for `[` to find them all:
 ## Customer reviews
 
 The four review cards quote the shop's Google Maps listing word for word, with
-the reviewers' own spelling. Three are credited by the reviewer's first name
-only (Rupa, Atish, Santosh). The fourth ("Water purifier best price in style furnutre") is a
+the reviewers' own spelling. Three show the reviewer's name as it appears on
+Google. The fourth ("Water purifier best price in style furnutre") is a
 highlight Google shows without naming its reviewer, so it is credited only to
 "Google review".
 
