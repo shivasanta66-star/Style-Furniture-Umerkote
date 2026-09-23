@@ -64,9 +64,17 @@ on the page as written. Search `index.html` for `[` to find them all:
 
 ## Adding photographs
 
-Every photo on the page is an `<image-slot>` showing a caption that describes
-the shot it needs, for example "Fabric sofa set on the showroom floor". To fill
-one, add a `src`:
+**For now every slot shows a temporary illustration** from
+`assets/img/illustrations/` — flat drawings in the site palette, one per slot,
+matching each slot's caption. They are stand-ins for trying the site out and
+are meant to be replaced with real shop photos.
+
+To swap one, change its `src` to the photo. When all 15 are replaced, delete
+the `illustrations` folder.
+
+Every photo on the page is an `<image-slot>`. Its `placeholder` caption
+describes the shot it needs, for example "Fabric sofa set on the showroom
+floor". Point `src` at the photo:
 
 ```html
 <image-slot shape="rect" placeholder="Fabric sofa set on the showroom floor"
