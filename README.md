@@ -58,9 +58,21 @@ on the page as written. Search `index.html` for `[` to find them all:
 - `[CONFIRM]` on Home delivery, and `[CONFIRM FREE RADIUS]` in "After you buy"
 - `[MORE VILLAGES]` and `[CONFIRM AREA WITH OWNER]` in "Where we deliver"
 - FAQ answers for EMI, exchange and made-to-order work
-- `[REVIEWER NAME]` on the four review cards. The quotes paraphrase real
-  themes from the shop's Google reviews; only add names you have permission
-  to use.
+
+## Customer reviews
+
+The four review cards quote the shop's Google Maps listing word for word, with
+the reviewers' own spelling. Three show the reviewer's name as it appears on
+Google. The fourth ("Water purifier best price in style furnutre") is a
+highlight Google shows without naming its reviewer, so it is credited only to
+"Google review".
+
+Signed-out visitors to Google Maps see only three full reviews, which is why
+those three are used. To feature others, copy them from the listing while
+signed in and replace the text in the `review-grid` block of `index.html`.
+If the review count changes from 26, update it in five places: the hero badge,
+the reviews heading, the footer, the `og:description` tag and the JSON-LD
+`reviewCount`.
 
 ## Adding photographs
 
