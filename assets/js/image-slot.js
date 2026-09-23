@@ -1,165 +1,119 @@
 /*
- * image-slot.js — <image-slot> custom element.
+ * image-slot.js — <image-slot>: a photo placeholder that becomes the photo.
  *
- * A reserved, correctly-proportioned space for a photograph. Until a real
- * photo is dropped in it draws a labelled placeholder, so the layout never
- * shifts and it is obvious which shots the showroom still needs to take.
+ * Production version of the Claude Design <image-slot>. Same attributes, and
+ * the same empty state (faint fill, dashed ring, photo icon, caption), but
+ * read-only: there is no drag-and-drop editor on the live site. To show a
+ * real photograph, give the slot a `src`.
  *
- *   <image-slot ratio="4/3" label="Sofa set in the showroom"></image-slot>
- *   <image-slot ratio="4/3" label="Sofa set" src="assets/img/sofa.jpg"></image-slot>
+ *   <image-slot shape="rect" placeholder="Fabric sofa set on the showroom floor"></image-slot>
+ *   <image-slot shape="rect" placeholder="…" src="assets/img/sofa.webp"></image-slot>
+ *
+ * The slot fills its container (width and height 100%), so size it with the
+ * wrapper — the page wraps each one in an aspect-ratio box.
  *
  * Attributes
- *   src      path to the photo; when absent the placeholder is shown
- *   alt      alternative text (falls back to `label`)
- *   ratio    aspect ratio, e.g. "4/3", "16/9", "1/1" (default 4/3)
- *   label    caption shown on the placeholder
- *   fit      object-fit for the photo: cover (default) | contain
- *   position object-position for the photo, e.g. "center top"
- *   eager    load immediately instead of lazily (use for above-the-fold art)
+ *   src          photo URL; when absent or broken, the placeholder shows
+ *   alt          alternative text (defaults to `placeholder`)
+ *   placeholder  caption for the empty state, and the default alt text
+ *   shape        rect | rounded | circle | pill     (default rounded)
+ *   radius       corner radius in px for `rounded`  (default 12)
+ *   fit          cover | contain                    (default cover)
+ *   eager        load immediately (use for the hero); otherwise lazy
  */
+(() => {
+  if (customElements.get('image-slot')) return;
 
-const TEMPLATE = document.createElement('template');
-TEMPLATE.innerHTML = `
-  <style>
-    :host {
-      display: block;
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: var(--slot-ratio, 4 / 3);
-      background: var(--slot-bg, #e8ddcd);
-      border-radius: inherit;
-      color: var(--slot-ink, #6f6158);
-    }
-    img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: var(--slot-fit, cover);
-      object-position: var(--slot-position, center);
-      opacity: 0;
-      transition: opacity 420ms ease;
-    }
-    img.is-loaded { opacity: 1; }
-    .ph {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      padding: 1rem;
-      text-align: center;
-      background-image:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 55%),
-        repeating-linear-gradient(
-          45deg,
-          var(--slot-stripe, rgba(122, 78, 45, 0.07)) 0 10px,
-          transparent 10px 20px
-        );
-    }
-    .ph svg { width: 30px; height: 30px; opacity: 0.55; }
-    .ph span {
-      font: 500 0.75rem/1.4 var(--slot-font, system-ui, sans-serif);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      max-width: 22ch;
-      opacity: 0.8;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      img { transition: none; }
-    }
-  </style>
-  <div class="ph" part="placeholder" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-         stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="4" width="18" height="16" rx="2"/>
-      <circle cx="8.5" cy="9.5" r="1.6"/>
-      <path d="M21 16l-5-5-5 5-2-2-6 6"/>
-    </svg>
-    <span part="label"></span>
-  </div>
-`;
+  const ICON =
+    '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>' +
+    '<path d="m21 15-5-5L5 21"/></svg>';
 
-class ImageSlot extends HTMLElement {
-  static observedAttributes = ['src', 'alt', 'ratio', 'label', 'fit', 'position'];
+  const STYLE =
+    ':host{display:block;position:relative;font:13px/1.3 system-ui,-apple-system,sans-serif;' +
+    '  width:100%;height:100%;aspect-ratio:3/2}' +
+    '.frame{position:absolute;inset:0;overflow:hidden;background:rgba(127,127,127,.08)}' +
+    'img{position:absolute;inset:0;width:100%;height:100%;display:block;' +
+    '  object-fit:var(--fit,cover);opacity:0;transition:opacity .3s ease}' +
+    ':host([data-filled]) img{opacity:1}' +
+    '.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;' +
+    '  justify-content:center;gap:6px;text-align:center;padding:12px;box-sizing:border-box}' +
+    '.empty svg{opacity:.45}' +
+    '.empty .cap{max-width:90%;font-weight:500;letter-spacing:.01em;opacity:.75}' +
+    ':host([data-filled]) .empty{display:none}' +
+    '.ring{position:absolute;inset:0;pointer-events:none;border:1.5px dashed currentColor;opacity:.35}' +
+    ':host([data-filled]) .ring{display:none}' +
+    '@media (prefers-reduced-motion:reduce){img{transition:none}}';
 
-  #img = null;
-
-  constructor() {
-    super();
-    this.attachShadow({ mode: 'open' }).append(TEMPLATE.content.cloneNode(true));
-  }
-
-  connectedCallback() {
-    this.#syncRatio();
-    this.#syncLabel();
-    this.#syncSrc();
-  }
-
-  attributeChangedCallback(name) {
-    if (!this.shadowRoot) return;
-    if (name === 'ratio') this.#syncRatio();
-    else if (name === 'label') this.#syncLabel();
-    else this.#syncSrc();
-  }
-
-  get #placeholder() {
-    return this.shadowRoot.querySelector('.ph');
-  }
-
-  #syncRatio() {
-    const ratio = (this.getAttribute('ratio') || '4/3').replace('/', ' / ');
-    this.style.setProperty('--slot-ratio', ratio);
-  }
-
-  #syncLabel() {
-    const label = this.getAttribute('label') || 'Photo';
-    this.shadowRoot.querySelector('.ph span').textContent = label;
-  }
-
-  #syncSrc() {
-    const src = this.getAttribute('src');
-
-    if (!src) {
-      this.#img?.remove();
-      this.#img = null;
-      this.#placeholder.hidden = false;
-      return;
+  class ImageSlot extends HTMLElement {
+    static get observedAttributes() {
+      return ['src', 'alt', 'placeholder', 'shape', 'radius', 'fit'];
     }
 
-    if (!this.#img) {
-      this.#img = document.createElement('img');
-      this.#img.decoding = 'async';
-      this.shadowRoot.append(this.#img);
+    constructor() {
+      super();
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML =
+        '<style>' + STYLE + '</style>' +
+        '<div class="frame" part="frame"><img>' +
+        '<div class="empty" part="empty">' + ICON + '<div class="cap"></div></div></div>' +
+        '<div class="ring" aria-hidden="true"></div>';
+      this._frame = root.querySelector('.frame');
+      this._ring = root.querySelector('.ring');
+      this._img = root.querySelector('img');
+      this._cap = root.querySelector('.cap');
+
+      this._img.decoding = 'async';
+      this._img.addEventListener('load', () => this.toggleAttribute('data-filled', true));
+      // A missing or broken file falls back to the placeholder.
+      this._img.addEventListener('error', () => this.removeAttribute('data-filled'));
     }
 
-    const img = this.#img;
-    img.loading = this.hasAttribute('eager') ? 'eager' : 'lazy';
-    if (this.hasAttribute('eager')) img.fetchPriority = 'high';
-    img.alt = this.getAttribute('alt') ?? this.getAttribute('label') ?? '';
-    this.style.setProperty('--slot-fit', this.getAttribute('fit') || 'cover');
-    this.style.setProperty('--slot-position', this.getAttribute('position') || 'center');
+    connectedCallback() {
+      this._render();
+    }
 
-    img.classList.remove('is-loaded');
-    this.#placeholder.hidden = false;
+    attributeChangedCallback() {
+      if (this.isConnected) this._render();
+    }
 
-    img.onload = () => {
-      img.classList.add('is-loaded');
-      this.#placeholder.hidden = true;
-    };
-    // A missing or broken file falls back to the placeholder rather than a
-    // broken-image icon.
-    img.onerror = () => {
-      this.#placeholder.hidden = false;
-      img.removeAttribute('src');
-    };
-    img.src = src;
+    _render() {
+      const placeholder = this.getAttribute('placeholder') || 'Photo';
+      this._cap.textContent = placeholder;
+
+      const shape = (this.getAttribute('shape') || 'rounded').toLowerCase();
+      let radius = '';
+      if (shape === 'circle') radius = '50%';
+      else if (shape === 'pill') radius = '9999px';
+      else if (shape === 'rounded') {
+        const n = parseFloat(this.getAttribute('radius'));
+        radius = (Number.isFinite(n) ? n : 12) + 'px';
+      }
+      this._frame.style.borderRadius = radius;
+      this._ring.style.borderRadius = radius;
+
+      this.style.setProperty('--fit', this.getAttribute('fit') === 'contain' ? 'contain' : 'cover');
+
+      const img = this._img;
+      img.alt = this.getAttribute('alt') ?? placeholder;
+      img.loading = this.hasAttribute('eager') ? 'eager' : 'lazy';
+
+      const src = this.getAttribute('src');
+      if (!src) {
+        img.removeAttribute('src');
+        this.removeAttribute('data-filled');
+        // With no photo, the slot is decoration; the caption is not content.
+        img.setAttribute('aria-hidden', 'true');
+        return;
+      }
+      img.removeAttribute('aria-hidden');
+      if (img.getAttribute('src') !== src) {
+        this.removeAttribute('data-filled');
+        img.src = src;
+      }
+    }
   }
-}
 
-if (!customElements.get('image-slot')) {
   customElements.define('image-slot', ImageSlot);
-}
-
-export default ImageSlot;
+})();

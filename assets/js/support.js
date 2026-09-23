@@ -1,246 +1,174 @@
 /*
- * support.js — shared configuration and helpers for the Style Furniture site.
+ * support.js — settings and behaviour for the Style Furniture page.
  *
- * EDIT THE `SITE` OBJECT BELOW and every page updates: phone numbers, address,
- * opening hours, map link and social links are all read from here at runtime.
- * Anything written as "XXXXX" or marked TODO is a placeholder that must be
- * replaced with the showroom's real details before the site goes live.
+ * ┌──────────────────────────────────────────────────────────────────┐
+ * │ EDIT THESE THREE VALUES. They are the same three settings the    │
+ * │ Claude Design file exposes, and every Call / WhatsApp link, the  │
+ * │ printed numbers and the offer banner on the page read from them. │
+ * └──────────────────────────────────────────────────────────────────┘
  */
-
-export const SITE = {
-  name: 'Style Furniture',
-  tagline: 'Umerkote',
-  // TODO: replace with the showroom's real number (digits only, with country code).
-  phone: '919999999999',
-  phoneDisplay: '+91 99999 99999',
-  // TODO: replace with the WhatsApp business number if it differs from the above.
-  whatsapp: '919999999999',
-  email: 'hello@stylefurniture.example',
-  address: {
-    line1: 'Main Road, near Bus Stand',   // TODO: confirm
-    line2: 'Umerkote, Nabarangpur',
-    state: 'Odisha',
-    pin: '764073',
-  },
-  // TODO: paste the showroom's own Google Maps share link.
-  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Style+Furniture+Umerkote',
-  mapsEmbed: 'https://www.google.com/maps?q=Umerkote,+Odisha+764073&output=embed',
-  hours: [
-    { days: 'Monday – Saturday', time: '9:00 am – 8:30 pm' },
-    { days: 'Sunday', time: '10:00 am – 6:00 pm' },
-  ],
-  social: {
-    facebook: '',   // TODO
-    instagram: '',  // TODO
-    youtube: '',    // TODO
-  },
-  established: 2012, // TODO: confirm the year the showroom opened.
+const SITE = {
+  // Shop phone, as it should be printed, e.g. '+91 98765 43210'.
+  phone: '[PHONE NUMBER]',
+  // WhatsApp number with the 91 country code, e.g. '919876543210'.
+  whatsapp: '[WHATSAPP NUMBER]',
+  // One festival or seasonal offer line. Leave empty to hide the banner.
+  offerText: '',
 };
 
-/* ------------------------------------------------------------------ *
- * Tiny DOM helpers
- * ------------------------------------------------------------------ */
+(() => {
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-export const $ = (sel, root = document) => root.querySelector(sel);
-export const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  /* -------------------------------------------------------------- links */
 
-export function el(tag, attrs = {}, children = []) {
-  const node = document.createElement(tag);
-  for (const [key, value] of Object.entries(attrs)) {
-    if (value === null || value === undefined || value === false) continue;
-    if (key === 'class') node.className = value;
-    else if (key === 'dataset') Object.assign(node.dataset, value);
-    else if (key.startsWith('on') && typeof value === 'function') {
-      node.addEventListener(key.slice(2).toLowerCase(), value);
-    } else node.setAttribute(key, value === true ? '' : String(value));
-  }
-  for (const child of [].concat(children)) {
-    if (child === null || child === undefined || child === false) continue;
-    node.append(child instanceof Node ? child : document.createTextNode(String(child)));
-  }
-  return node;
-}
-
-/* ------------------------------------------------------------------ *
- * Formatting + links
- * ------------------------------------------------------------------ */
-
-const rupees = new Intl.NumberFormat('en-IN', {
-  style: 'currency',
-  currency: 'INR',
-  maximumFractionDigits: 0,
-});
-
-/** Price ranges are indicative; the showroom quotes the final price in store. */
-export function formatPrice(from, to) {
-  if (!from) return 'Price on request';
-  if (to && to !== from) return `${rupees.format(from)} – ${rupees.format(to)}`;
-  return `From ${rupees.format(from)}`;
-}
-
-export function telHref(number = SITE.phone) {
-  return `tel:+${String(number).replace(/\D/g, '')}`;
-}
-
-export function whatsappHref(message = "Hello! I'd like to know more about your furniture.") {
-  const number = String(SITE.whatsapp).replace(/\D/g, '');
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-}
-
-export function enquiryHref(product) {
-  if (!product) return whatsappHref();
-  return whatsappHref(
-    `Hello ${SITE.name}! I'm interested in the "${product.name}". Could you share availability and the best price?`
-  );
-}
-
-export function fullAddress() {
-  const a = SITE.address;
-  return `${a.line1}, ${a.line2}, ${a.state} ${a.pin}`;
-}
-
-/* ------------------------------------------------------------------ *
- * Behaviour shared by every page
- * ------------------------------------------------------------------ */
-
-/** Mobile nav drawer. */
-function initNav() {
-  const toggle = $('[data-nav-toggle]');
-  const menu = $('[data-nav-menu]');
-  if (!toggle || !menu) return;
-
-  const setOpen = (open) => {
-    toggle.setAttribute('aria-expanded', String(open));
-    menu.dataset.open = String(open);
-    document.body.classList.toggle('is-locked', open);
-  };
-
-  toggle.addEventListener('click', () => {
-    setOpen(toggle.getAttribute('aria-expanded') !== 'true');
-  });
-  menu.addEventListener('click', (e) => {
-    if (e.target.closest('a')) setOpen(false);
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') setOpen(false);
-  });
-  // Reset when we cross back to the desktop layout.
-  matchMedia('(min-width: 900px)').addEventListener('change', (e) => {
-    if (e.matches) setOpen(false);
-  });
-}
-
-/** Sticky header gets a shadow once the page scrolls. */
-function initHeaderState() {
-  const header = $('[data-header]');
-  if (!header) return;
-  const update = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
-  update();
-  addEventListener('scroll', update, { passive: true });
-}
-
-/** Light/dark toggle, remembered per browser. Falls back to the OS setting. */
-function initTheme() {
-  let stored = null;
-  try {
-    stored = localStorage.getItem('sf-theme');
-  } catch {
-    /* private mode / blocked storage — stay on the OS preference */
-  }
-  if (stored === 'light' || stored === 'dark') {
-    document.documentElement.dataset.theme = stored;
+  function wa(message) {
+    const digits = String(SITE.whatsapp).replace(/\D/g, '');
+    // Until a real number is set, fall back to WhatsApp's own "choose a
+    // chat" link so the buttons still open WhatsApp with the text typed.
+    return 'https://wa.me/' + digits + '?text=' + encodeURIComponent(message);
   }
 
-  $$('[data-theme-toggle]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const isDark =
-        document.documentElement.dataset.theme === 'dark' ||
-        (!document.documentElement.dataset.theme &&
-          matchMedia('(prefers-color-scheme: dark)').matches);
-      const next = isDark ? 'light' : 'dark';
-      document.documentElement.dataset.theme = next;
-      try {
-        localStorage.setItem('sf-theme', next);
-      } catch {
-        /* ignore */
-      }
+  const telHref = () => 'tel:' + String(SITE.phone).replace(/\s+/g, '');
+
+  function fillContactDetails() {
+    $$('[data-wa]').forEach((a) => {
+      a.href = wa(a.dataset.wa);
     });
-  });
-}
+    $$('[data-tel]').forEach((a) => {
+      a.href = telHref();
+    });
+    $$('[data-phone-label]').forEach((n) => {
+      n.textContent = SITE.phone;
+    });
+    $$('[data-whatsapp-label]').forEach((n) => {
+      n.textContent = SITE.whatsapp;
+    });
+    $$('[data-year]').forEach((n) => {
+      n.textContent = String(new Date().getFullYear());
+    });
 
-/** Fade sections in as they scroll into view (skipped for reduced motion). */
-function initReveal() {
-  // Tells the head-script failsafe that the reveal animation is alive, so it
-  // does not strip `has-js` and show everything at once.
-  document.documentElement.setAttribute('data-reveal-ready', '');
-
-  const targets = $$('[data-reveal]');
-  if (!targets.length) return;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
-    targets.forEach((t) => t.classList.add('is-visible'));
-    return;
+    // Keep the structured data's phone in step with the page.
+    const ld = document.querySelector('script[type="application/ld+json"]');
+    if (ld) {
+      try {
+        const data = JSON.parse(ld.textContent);
+        data.telephone = SITE.phone;
+        ld.textContent = JSON.stringify(data);
+      } catch {
+        /* leave it as written */
+      }
+    }
   }
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
+
+  /* -------------------------------------------------------------- offer banner */
+
+  function showOffer() {
+    const banner = document.querySelector('[data-offer]');
+    if (!banner) return;
+    const offer = String(SITE.offerText || '').trim();
+    banner.hidden = offer.length === 0;
+    const line = banner.querySelector('[data-offer-text]');
+    if (line) line.textContent = offer;
+  }
+
+  /* -------------------------------------------------------------- fixed header */
+
+  // The header wraps to two or three rows depending on width, so size the
+  // spacer below it (and the anchor-jump offset) to its real height.
+  function syncHeader() {
+    const header = document.querySelector('[data-header]');
+    const spacer = document.querySelector('[data-header-spacer]');
+    if (!header || !spacer) return;
+    const targets = $$('main section[id]');
+    const sync = () => {
+      const h = header.offsetHeight;
+      spacer.style.height = h + 'px';
+      targets.forEach((t) => {
+        t.style.scrollMarginTop = h + 16 + 'px';
       });
-    },
-    { rootMargin: '0px 0px -10% 0px', threshold: 0.08 }
-  );
-  targets.forEach((t) => io.observe(t));
-}
+    };
+    sync();
+    if (window.ResizeObserver) new ResizeObserver(sync).observe(header);
+    window.addEventListener('resize', sync);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+  }
 
-/** Fill every [data-site="..."] slot from SITE, and point contact links at it. */
-function initSiteDetails() {
-  const values = {
-    name: SITE.name,
-    phone: SITE.phoneDisplay,
-    email: SITE.email,
-    address: fullAddress(),
-    'address-line1': SITE.address.line1,
-    'address-line2': `${SITE.address.line2}, ${SITE.address.state} ${SITE.address.pin}`,
-    year: String(new Date().getFullYear()),
-    established: String(SITE.established),
-  };
-  $$('[data-site]').forEach((node) => {
-    const value = values[node.dataset.site];
-    if (value) node.textContent = value;
-  });
+  /* -------------------------------------------------------------- opening hours */
 
-  $$('[data-link="tel"]').forEach((a) => (a.href = telHref()));
-  $$('[data-link="whatsapp"]').forEach((a) => (a.href = whatsappHref(a.dataset.message || undefined)));
-  $$('[data-link="maps"]').forEach((a) => (a.href = SITE.mapsUrl));
-  $$('[data-link="email"]').forEach((a) => (a.href = `mailto:${SITE.email}`));
+  function highlightToday() {
+    const row = document.querySelector('[data-hours] tr[data-day="' + new Date().getDay() + '"]');
+    if (!row) return;
+    row.classList.add('is-today');
+    const th = row.querySelector('th');
+    if (th) {
+      const tag = document.createElement('span');
+      tag.className = 'hours__today';
+      tag.textContent = ' · today';
+      th.append(tag);
+    }
+  }
 
-  $$('[data-hours]').forEach((list) => {
-    list.replaceChildren(
-      ...SITE.hours.map((h) =>
-        el('div', { class: 'hours__row' }, [
-          el('span', { class: 'hours__days' }, h.days),
-          el('span', { class: 'hours__time' }, h.time),
-        ])
-      )
+  /* -------------------------------------------------------------- scroll reveal */
+
+  // Content is visible from the start; the rise only plays as each block
+  // arrives, so nothing can be left hidden if this never runs.
+  function reveal() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.style.animation = 'rise 300ms ease-out both';
+          io.unobserve(e.target);
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px' }
     );
-  });
-}
+    $$('[data-reveal]').forEach((n) => io.observe(n));
+  }
 
-/** Mark the current page in the nav. */
-function initActiveNav() {
-  const here = location.pathname.split('/').pop() || 'index.html';
-  $$('[data-nav-menu] a[href]').forEach((a) => {
-    const target = a.getAttribute('href').split('#')[0];
-    if (target && target === here) a.setAttribute('aria-current', 'page');
-  });
-}
+  /* -------------------------------------------------------------- enquiry form */
 
-export function initSite() {
-  initTheme();
-  initNav();
-  initHeaderState();
-  initSiteDetails();
-  initActiveNav();
-  initReveal();
-}
+  // No backend: the form writes a WhatsApp message and opens it.
+  function enquiryForm() {
+    const form = document.querySelector('[data-enquiry]');
+    if (!form) return;
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      // namedItem(), not elements[n]: the select is called "item", and
+      // elements.item is a built-in method, so elements['item'] would return
+      // that function instead of the field and the choice would be lost.
+      const v = (n) => {
+        const field = form.elements.namedItem(n);
+        return ((field && field.value) || '').trim();
+      };
+      const lines = [
+        'Hello Style Furniture,',
+        'Name: ' + v('name'),
+        'Phone: ' + v('phone'),
+        'Village: ' + (v('village') || '-'),
+        'Looking for: ' + v('item'),
+        v('message') ? 'Details: ' + v('message') : null,
+      ].filter(Boolean);
+      window.open(wa(lines.join('\n')), '_blank', 'noopener');
+    });
+  }
+
+  /* -------------------------------------------------------------- boot */
+
+  function boot() {
+    fillContactDetails();
+    showOffer();
+    syncHeader();
+    highlightToday();
+    reveal();
+    enquiryForm();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+})();
