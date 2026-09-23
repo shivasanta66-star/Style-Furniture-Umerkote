@@ -1,114 +1,112 @@
-# Style Furniture — Umerkote
+# Style Furniture — Gulipatna, Umerkote
 
-Website for **Style Furniture**, a furniture showroom in Umerkote, Nabarangpur,
-Odisha. Four pages, no build step, no dependencies — plain HTML, CSS and ES
-modules that can be dropped on any static host.
+The website for **Style Furniture**, in front of the Block Office, Gulipatna
+Main Road, Umerkote, Odisha 764073.
+
+This is a production build of the Claude Design file **`Style Furniture.dc.html`**
+(project "Single-page site built and ready"). Layout, colours, type, spacing
+and every line of copy follow that design exactly. The prototype's inline
+styles and design-tool runtime have been replaced by a plain stylesheet and a
+small script. There is no build step and nothing to install.
 
 ```
-index.html          Home — hero, rooms, featured pieces, how it works, gallery, visit
-products.html       Full catalogue with room filters, search and an FAQ
-about.html          The showroom's story, how we work, the team
-contact.html        Address, hours, map and a WhatsApp enquiry form
-assets/css/styles.css
-assets/js/support.js      Site config (phone, address, hours) + shared behaviour
-assets/js/image-slot.js   <image-slot> custom element — photo placeholders
-assets/js/products.js     The catalogue data
-assets/js/main.js         Page wiring
-assets/img/               Drop showroom photographs here
+index.html                The page
+assets/css/styles.css     All styling (design tokens at the top)
+assets/js/support.js      The three settings + page behaviour
+assets/js/image-slot.js   <image-slot> photo placeholders
+assets/img/               Shop photographs go here
 ```
 
-## Run it locally
+## Run it
+
+Open `index.html` in a browser, or serve the folder:
 
 ```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
+python3 -m http.server 8000     # then open http://localhost:8000
 ```
 
-It must be served over HTTP rather than opened as a `file://` path, because the
-pages load ES modules.
+## The three settings
 
-## Before this goes live — required edits
+At the top of `assets/js/support.js`. These are the same three values the
+Claude Design file exposes, and every Call and WhatsApp button, the printed
+numbers and the offer banner all read from them:
 
-Everything marked `TODO` is a placeholder. Two files hold all of it.
+```js
+const SITE = {
+  phone: '[PHONE NUMBER]',        // as printed, e.g. '+91 98765 43210'
+  whatsapp: '[WHATSAPP NUMBER]',  // with 91 prefix, e.g. '919876543210'
+  offerText: '',                  // one offer line; empty hides the banner
+};
+```
 
-**1. `assets/js/support.js` — the `SITE` object.** Every page reads from here,
-so changing it once updates the whole site:
+Until a WhatsApp number is set, the WhatsApp buttons open WhatsApp's "choose a
+chat" screen with the message already typed, so they still work in a preview.
 
-| Field | What to put |
-|---|---|
-| `phone`, `whatsapp` | Real numbers, digits only with country code (`91…`) |
-| `phoneDisplay` | How the number should be printed |
-| `email` | A real mailbox (currently an `.example` address) |
-| `address` | Confirm street, landmark and PIN |
-| `mapsUrl`, `mapsEmbed` | The showroom's own Google Maps links |
-| `hours` | Real opening times |
-| `social` | Facebook / Instagram / YouTube URLs |
-| `established` | The year the showroom opened |
+Also update `"telephone"` in the JSON-LD block in the `<head>` of `index.html`.
+The script keeps it in step when the page runs, but search engines that do not
+run scripts read the written value.
 
-**2. `assets/js/products.js`** — the catalogue. The price ranges are
-placeholders; replace them with the showroom's own. Add or remove items freely
-— both the home page and the products page rebuild from this list.
+## Before publishing — placeholders from the design
 
-**3. Sample reviews.** The three testimonials on the home page are marked
-`SAMPLE CONTENT` in `index.html`. Replace them with real, permitted customer
-reviews, or delete the section. Do not publish the samples as if they were
-genuine.
+The design marks every unconfirmed detail in square brackets, and they appear
+on the page as written. Search `index.html` for `[` to find them all:
+
+- Phone and WhatsApp number (settings above)
+- `[OWNER NAME]` in "One number for any problem"
+- `[BRANDS]` on the mattress and water purifier cards
+- `[OTHER CATEGORY]` — the eighth category tile and its WhatsApp message
+- `[CONFIRM]` on Home delivery, and `[CONFIRM FREE RADIUS]` in "After you buy"
+- `[MORE VILLAGES]` and `[CONFIRM AREA WITH OWNER]` in "Where we deliver"
+- FAQ answers for EMI, exchange and made-to-order work
+- `[REVIEWER NAME]` on the four review cards. The quotes paraphrase real
+  themes from the shop's Google reviews; only add names you have permission
+  to use.
 
 ## Adding photographs
 
-Photos go in `assets/img/`, and each one is placed through an `<image-slot>`:
+Every photo on the page is an `<image-slot>` showing a caption that describes
+the shot it needs, for example "Fabric sofa set on the showroom floor". To fill
+one, add a `src`:
 
 ```html
-<image-slot ratio="4/3" label="Showroom sofa display"
-            alt="Sofa sets on display" src="assets/img/sofa-display.jpg"></image-slot>
+<image-slot shape="rect" placeholder="Fabric sofa set on the showroom floor"
+            src="assets/img/sofa-set.webp"></image-slot>
 ```
 
-For catalogue items, set the `image` field in `products.js` instead —
-`image: 'assets/img/royal-sofa.jpg'`.
+The caption becomes the photo's alt text; add `alt="…"` to override it. A
+missing or broken file falls back to the placeholder. The brief asks for real
+shop photos (local buyers recognise stock photos), in WebP, keeping the whole
+page under 1.5 MB.
 
-Until a `src` is given, the slot draws a labelled placeholder at the right
-aspect ratio. That means the layout is already correct and it is obvious which
-photographs still need taking. A broken or missing file falls back to the
-placeholder rather than a broken-image icon.
+## Differences from the design file
 
-Shots worth taking: the shop front, a wide view of the floor, one clean shot
-per room category, and a few delivered sets in customers' homes.
+- **Bug fixed — the enquiry form lost "What are you looking for".** The design
+  reads fields with `form.elements[name]`. The select is named `item`, and
+  `elements.item` is a built-in method, so it returned that function instead
+  of the field and every enquiry arrived with "Looking for:" blank. Fixed with
+  `elements.namedItem()`.
+- The design has no `<title>`; the page uses its Open Graph title, which is
+  also the meta title the brief asks for.
+- Added a favicon matching the SF badge, `lang="or"` on the Odia lines, and
+  labels on the section navigation and the bottom bar for screen readers.
 
-## How the enquiry form works
+## Where the design differs from the written brief
 
-There is no backend. The contact form packages what the visitor typed into a
-WhatsApp message and opens it in a new tab, so enquiries land in the showroom's
-normal WhatsApp inbox. If you later want them by email instead, point the form
-at a form service and replace the submit handler in `main.js`.
+The page follows the design file. The brief (`Style_Furniture_Umerkote_Website_Brief.pdf`)
+asked for three things the design does not do. They are left out here so the
+site matches the design, and can be added if wanted:
 
-## Notes
-
-- **Theme** — follows the operating system, with a toggle in the header that is
-  remembered per browser.
-- **Accessibility** — skip link, visible focus rings, labelled controls, live
-  region on the catalogue count, and `prefers-reduced-motion` respected.
-- **SEO** — per-page titles and descriptions, Open Graph tags, and
-  `FurnitureStore` structured data generated from `SITE` (helps the showroom
-  surface in local and map results). Add a real `og:image` once there is a
-  photograph worth sharing.
-- **Fonts** — Fraunces and Inter from Google Fonts, with system-font fallbacks
-  if they fail to load.
+1. **Header on phones** — the brief asks for a hamburger menu under 768px and
+   a header that shrinks on scroll. The design wraps the header instead: at
+   phone width it is three rows (logo, Call/WhatsApp, links), about 208px tall
+   and fixed, roughly a quarter of the screen.
+2. **Desktop WhatsApp button** — the brief asks for a floating round WhatsApp
+   button on desktop and the three-button bar on mobile only. The design shows
+   the bar at every width.
+3. **Category grid** — the brief asks for 2 columns on phones; the design's
+   grid gives 1 column below about 540px.
 
 ## Deploying
 
-Any static host works — GitHub Pages, Netlify, Cloudflare Pages, or plain
-shared hosting. There is nothing to build: upload the repository as-is.
-
----
-
-### On the Claude Design import
-
-This site was **not** generated from the `Style Furniture.dc.html` Claude Design
-project. That project could not be read from this session — the design MCP
-needs an authorization that `/design-login` cannot obtain in a remote Claude
-Code session, and the project URL returns HTTP 403 without it.
-
-The layout, palette and copy here are therefore an independent design, built to
-the same brief. To bring the original design in, either run `/design-login` in
-an interactive Claude Code session on a local machine, or use Claude Design's
-**"Send to Claude Code Web"**, which seeds the project files into the workspace.
+Any static host works — GitHub Pages, Netlify, Cloudflare Pages, or ordinary
+shared hosting. Upload the folder as it is.
