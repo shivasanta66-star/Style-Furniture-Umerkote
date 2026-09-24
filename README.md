@@ -103,8 +103,8 @@ page under 1.5 MB.
   `elements.item` is a built-in method, so it returned that function instead
   of the field and every enquiry arrived with "Looking for:" blank. Fixed with
   `elements.namedItem()`.
-- The design has no `<title>`; the page uses its Open Graph title, which is
-  also the meta title the brief asks for.
+- The design has no `<title>`. The page title is "Style Furniture – Furniture
+  Shop in Umerkote, Nabarangpur", set by the owner.
 - Added a favicon matching the SF badge, `lang="or"` on the Odia lines, and
   labels on the section navigation and the bottom bar for screen readers.
 
