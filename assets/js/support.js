@@ -8,10 +8,10 @@
  * └──────────────────────────────────────────────────────────────────┘
  */
 const SITE = {
-  // Shop phone, as it should be printed, e.g. '+91 98765 43210'.
-  phone: '[PHONE NUMBER]',
-  // WhatsApp number with the 91 country code, e.g. '919876543210'.
-  whatsapp: '[WHATSAPP NUMBER]',
+  // Shop phone, as it should be printed. Call links dial it with the spaces removed.
+  phone: '+91 99376 01505',
+  // WhatsApp number, digits only, with the 91 country code.
+  whatsapp: '919937601505',
   // One festival or seasonal offer line. Leave empty to hide the banner.
   offerText: '',
 };
@@ -30,6 +30,14 @@ const SITE = {
 
   const telHref = () => 'tel:' + String(SITE.phone).replace(/\s+/g, '');
 
+  // '919937601505' -> '+91 99376 01505' (Indian mobile); anything else as given.
+  function formatWhatsapp(value) {
+    const d = String(value).replace(/\D/g, '');
+    return d.length === 12 && d.startsWith('91')
+      ? '+91 ' + d.slice(2, 7) + ' ' + d.slice(7)
+      : String(value);
+  }
+
   function fillContactDetails() {
     $$('[data-wa]').forEach((a) => {
       a.href = wa(a.dataset.wa);
@@ -41,7 +49,7 @@ const SITE = {
       n.textContent = SITE.phone;
     });
     $$('[data-whatsapp-label]').forEach((n) => {
-      n.textContent = SITE.whatsapp;
+      n.textContent = formatWhatsapp(SITE.whatsapp);
     });
     $$('[data-year]').forEach((n) => {
       n.textContent = String(new Date().getFullYear());

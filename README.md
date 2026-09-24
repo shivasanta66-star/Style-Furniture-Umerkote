@@ -33,25 +33,23 @@ numbers and the offer banner all read from them:
 
 ```js
 const SITE = {
-  phone: '[PHONE NUMBER]',        // as printed, e.g. '+91 98765 43210'
-  whatsapp: '[WHATSAPP NUMBER]',  // with 91 prefix, e.g. '919876543210'
-  offerText: '',                  // one offer line; empty hides the banner
+  phone: '+91 99376 01505',   // as printed; Call links dial it without spaces
+  whatsapp: '919937601505',   // digits only, with the 91 country code
+  offerText: '',              // one offer line; empty hides the banner
 };
 ```
 
-Until a WhatsApp number is set, the WhatsApp buttons open WhatsApp's "choose a
-chat" screen with the message already typed, so they still work in a preview.
-
-Also update `"telephone"` in the JSON-LD block in the `<head>` of `index.html`.
-The script keeps it in step when the page runs, but search engines that do not
-run scripts read the written value.
+The same numbers are also written directly into `index.html` (every
+`tel:` and `wa.me` link, the printed numbers, and `"telephone"` in the JSON-LD
+block), so the buttons work before the script loads and search engines read
+the real number. **If the number ever changes, update both places:** search
+`index.html` for `9937601505`.
 
 ## Before publishing — placeholders from the design
 
 The design marks every unconfirmed detail in square brackets, and they appear
 on the page as written. Search `index.html` for `[` to find them all:
 
-- Phone and WhatsApp number (settings above)
 - `[OWNER NAME]` in "One number for any problem"
 - `[BRANDS]` on the mattress and water purifier cards
 - `[OTHER CATEGORY]` — the eighth category tile and its WhatsApp message
