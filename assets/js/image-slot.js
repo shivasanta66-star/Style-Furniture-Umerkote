@@ -1,10 +1,9 @@
 /*
- * image-slot.js — <image-slot>: a photo placeholder that becomes the photo.
+ * image-slot.js: <image-slot>, a photo placeholder that becomes the photo.
  *
- * Production version of the Claude Design <image-slot>. Same attributes, and
- * the same empty state (faint fill, dashed ring, photo icon, caption), but
- * read-only: there is no drag-and-drop editor on the live site. To show a
- * real photograph, give the slot a `src`.
+ * It shows a faint box with a caption until it is given a `src`; a missing or
+ * broken file falls back to the caption. To show a real photograph, give the
+ * slot a `src`.
  *
  *   <image-slot shape="rect" placeholder="Fabric sofa set on the showroom floor"></image-slot>
  *   <image-slot shape="rect" placeholder="…" src="assets/img/sofa.webp"></image-slot>

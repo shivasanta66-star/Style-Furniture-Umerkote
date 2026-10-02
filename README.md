@@ -3,11 +3,7 @@
 The website for **Style Furniture**, in front of the Block Office, Gulipatna
 Main Road, Umerkote, Odisha 764073.
 
-This is a production build of the Claude Design file **`Style Furniture.dc.html`**
-(project "Single-page site built and ready"). Layout, colours, type, spacing
-and every line of copy follow that design exactly. The prototype's inline
-styles and design-tool runtime have been replaced by a plain stylesheet and a
-small script. There is no build step and nothing to install.
+A plain HTML, CSS and JavaScript site. There is no build step and nothing to install.
 
 ```
 index.html                The page
@@ -27,9 +23,8 @@ python3 -m http.server 8000     # then open http://localhost:8000
 
 ## The three settings
 
-At the top of `assets/js/support.js`. These are the same three values the
-Claude Design file exposes, and every Call and WhatsApp button, the printed
-numbers and the offer banner all read from them:
+At the top of `assets/js/support.js`. Every Call and WhatsApp button, the printed numbers and the
+offer banner read from them:
 
 ```js
 const SITE = {
@@ -95,33 +90,6 @@ missing or broken file falls back to the placeholder. The brief asks for real
 shop photos (local buyers recognise stock photos), in WebP, keeping the whole
 page under 1.5 MB.
 
-## Differences from the design file
-
-- **Bug fixed — the enquiry form lost "What are you looking for".** The design
-  reads fields with `form.elements[name]`. The select is named `item`, and
-  `elements.item` is a built-in method, so it returned that function instead
-  of the field and every enquiry arrived with "Looking for:" blank. Fixed with
-  `elements.namedItem()`.
-- The design has no `<title>`. The page title is "Style Furniture – Furniture
-  Shop in Umerkote, Nabarangpur", set by the owner.
-- Added a favicon matching the SF badge, `lang="or"` on the Odia lines, and
-  labels on the section navigation and the bottom bar for screen readers.
-
-## Where the design differs from the written brief
-
-The page follows the design file. The brief (`Style_Furniture_Umerkote_Website_Brief.pdf`)
-asked for three things the design does not do. They are left out here so the
-site matches the design, and can be added if wanted:
-
-1. **Header on phones** — the brief asks for a hamburger menu under 768px and
-   a header that shrinks on scroll. The design wraps the header instead: at
-   phone width it is three rows (logo, Call/WhatsApp, links), about 208px tall
-   and fixed, roughly a quarter of the screen.
-2. **Desktop WhatsApp button** — the brief asks for a floating round WhatsApp
-   button on desktop and the three-button bar on mobile only. The design shows
-   the bar at every width.
-3. **Category grid** — the brief asks for 2 columns on phones; the design's
-   grid gives 1 column below about 540px.
 
 ## Deploying
 

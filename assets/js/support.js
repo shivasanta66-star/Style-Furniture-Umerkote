@@ -1,11 +1,8 @@
 /*
- * support.js — settings and behaviour for the Style Furniture page.
+ * support.js: the shop's settings and the page's small behaviours.
  *
- * ┌──────────────────────────────────────────────────────────────────┐
- * │ EDIT THESE THREE VALUES. They are the same three settings the    │
- * │ Claude Design file exposes, and every Call / WhatsApp link, the  │
- * │ printed numbers and the offer banner on the page read from them. │
- * └──────────────────────────────────────────────────────────────────┘
+ * Edit the three values in SITE below. Every Call and WhatsApp link, the
+ * printed numbers and the offer banner read from them.
  */
 const SITE = {
   // Shop phone, as it should be printed. Call links dial it with the spaces removed.
@@ -142,26 +139,6 @@ const SITE = {
     }
   }
 
-  /* -------------------------------------------------------------- scroll reveal */
-
-  // Content is visible from the start; the rise only plays as each block
-  // arrives, so nothing can be left hidden if this never runs.
-  function reveal() {
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    if (typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (!e.isIntersecting) return;
-          e.target.style.animation = 'rise 300ms ease-out both';
-          io.unobserve(e.target);
-        });
-      },
-      { rootMargin: '0px 0px -8% 0px' }
-    );
-    $$('[data-reveal]').forEach((n) => io.observe(n));
-  }
-
   /* -------------------------------------------------------------- enquiry form */
 
   // No backend: the form writes a WhatsApp message and opens it.
@@ -196,7 +173,6 @@ const SITE = {
     syncHeader();
     highlightToday();
     openStatus();
-    reveal();
     enquiryForm();
   }
 
