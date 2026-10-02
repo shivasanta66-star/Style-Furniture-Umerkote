@@ -236,7 +236,7 @@ summary::-webkit-details-marker { display: none; }
 
 .pill-wa { height: 44px; padding: 0 18px; font-size: 15px; }
 
-.header-spacer { height: 112px; }
+.header-spacer { height: 86px; } /* script sets the exact height; this avoids a jump */
 @media (min-width: 900px) {
   .nav { order: 0; width: auto; gap: 6px 26px; }
   .brand { margin-right: 0; }
@@ -668,6 +668,7 @@ body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
 .action-bar .action-bar__wa { flex: 1.4; }
 
 @media (max-width: 700px) {
+  .header-spacer { height: 95px; }
   /* Header: wordmark row plus one swipeable nav strip. Call and WhatsApp live
      in the bottom bar, so the header does not repeat them. */
   .header__inner { padding: 8px 16px 0; gap: 4px 0; }

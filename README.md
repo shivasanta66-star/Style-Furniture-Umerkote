@@ -133,8 +133,18 @@ shared hosting. Upload the folder as it is.
 Search setup lives in the `<head>` of `index.html` (title, description,
 canonical, Open Graph, geo tags, two JSON-LD blocks: `FurnitureStore` and
 `FAQPage`), plus `robots.txt` and `sitemap.xml`. The share image is
-`assets/img/og-share.png` (1200 × 630). If the opening hours, rating or
+`assets/img/og-share.jpg` (1200 × 630). If the opening hours, rating or
 review count change, update the JSON-LD as well as the visible text.
 
 See `GOOGLE-BUSINESS.md` for the checklist to do in the Google Business
 Profile itself.
+
+## Performance
+
+The page is about 34 KB of HTML, 26 KB of CSS and 13 KB of script, with no
+build step. Web fonts load without blocking first paint, the hero image is
+preloaded, and the header spacer has a default height so nothing jumps when the
+script runs. `_headers` sets caching and basic security headers on Netlify. The
+share image is a 55 KB JPEG, small enough for WhatsApp link previews. When real
+photos replace the illustrations, save them as WebP at about 1200 px wide for
+the hero and 800 px for the rest, to keep the page light.
