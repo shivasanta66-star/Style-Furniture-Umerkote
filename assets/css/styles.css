@@ -335,7 +335,7 @@ summary::-webkit-details-marker { display: none; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(36, 28, 22, 0) 38%, rgba(36, 28, 22, 0.82) 100%);
+  background: linear-gradient(180deg, rgba(36, 28, 22, 0) 30%, rgba(36, 28, 22, 0.88) 100%);
   pointer-events: none;
 }
 .cat-card__body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 14px 16px; }
@@ -647,3 +647,99 @@ summary::-webkit-details-marker { display: none; }
 .action-bar a:hover { background: #42332C; color: #F7F1E8; }
 .action-bar .action-bar__wa { background: var(--wa); color: #0B2E17; font-weight: 600; }
 .action-bar .action-bar__wa:hover { background: #1FBA5A; color: #0B2E17; }
+
+/* ---------------------------------------------------------------- phones */
+
+/* Touch targets: 44px minimum for anything tapped in running text or lists. */
+.product__cta,
+.reviews-link,
+.footer__link,
+.link-brass,
+.faq summary { display: inline-flex; align-items: center; min-height: 44px; }
+.faq summary { display: flex; padding-top: 0; padding-bottom: 0; }
+.faq summary::after { top: 50%; transform: translateY(-50%); }
+.footer__link { padding: 0; }
+.footer .footer__line { margin-bottom: 0; }
+
+body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
+.action-bar { padding-bottom: env(safe-area-inset-bottom); }
+.action-bar a { min-height: 60px; }
+.action-bar .action-bar__wa { flex: 1.4; }
+
+@media (max-width: 700px) {
+  /* Header: wordmark row plus one swipeable nav strip. Call and WhatsApp live
+     in the bottom bar, so the header does not repeat them. */
+  .header__inner { padding: 8px 16px 0; gap: 4px 0; }
+  .header__actions { display: none; }
+  .brand__badge { width: 38px; height: 38px; font-size: 17px; }
+  .brand { gap: 10px; }
+  .lockup { text-align: left; }
+  .lockup__name { font-size: 16px; line-height: 1.02; }
+  .lockup__name br { display: none; }
+  .lockup__rule { display: none; }
+  .lockup__place { font-size: 9px; letter-spacing: 3px; margin-top: 2px; }
+  .nav {
+    flex-wrap: nowrap;
+    gap: 0;
+    overflow-x: auto;
+    width: calc(100% + 32px);
+    margin: 0 -16px;
+    padding: 0 8px;
+    scrollbar-width: none;
+    border-top: 1px solid #4A3A32;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; padding: 0 12px; line-height: 44px; font-size: 15px; }
+
+  .section { padding: 36px 16px; }
+  .sec-head { margin-bottom: 20px; padding-bottom: 12px; }
+  .odia { font-size: 14px; }
+  .trust { padding: 0 16px; }
+
+  /* Hero: darker wash behind the text, buttons side by side. */
+  .hero { min-height: 0; }
+  .hero__shade {
+    background: linear-gradient(180deg, rgba(47, 36, 32, 0.55) 0%, rgba(47, 36, 32, 0.88) 45%, rgba(47, 36, 32, 0.95) 100%);
+  }
+  .hero__content { padding: 40px 16px 28px; }
+  .hero__title { font-size: clamp(36px, 10.5vw, 46px); max-width: 11ch; }
+  .hero__odia { font-size: 15px; }
+  .hero__lede { font-size: 16px; margin-bottom: 22px; }
+  .hero__actions { gap: 10px; }
+  .hero__actions .btn--lg { flex: 1 1 0; min-width: 0; padding: 0 12px; font-size: 16px; min-height: 52px; }
+  .hero__hours { line-height: 1.7; }
+  .hero__hours .stars { display: inline-block; }
+  .hero__sep { display: block; height: 0; margin: 0; overflow: hidden; }
+
+  .cat-grid { grid-auto-rows: 150px; gap: 6px; }
+  .cat-card--feature { grid-row: span 2; }
+  .cat-card--feature .cat-card__name { font-size: 22px; }
+  .cat-card__body { padding: 10px 12px; }
+  .cat-card__name { font-size: 17px; }
+  .cat-card__desc { font-size: 12px; }
+
+  .product { grid-template-columns: 104px 1fr; gap: 14px; padding: 16px 0; }
+  .product .h3 { font-size: 18px; }
+  .product__desc { font-size: 14px; }
+
+  .firm i { width: 24px; }
+  .sleep-cta { width: 100%; text-align: center; padding: 10px 20px; line-height: 1.3; }
+
+  .service { gap: 14px; }
+  .review--lead p { font-size: clamp(26px, 8vw, 34px); }
+  .review p { font-size: 18px; }
+  .chip { padding: 8px 14px; font-size: 14px; }
+
+  .map iframe { height: 260px; }
+  .directions { width: 100%; }
+  .hours td, .hours th { font-size: 15px; }
+
+  .form { gap: 14px; }
+  .form__submit { justify-self: stretch; width: 100%; }
+  .field select { appearance: none; -webkit-appearance: none; padding-right: 36px;
+    background: #fff url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='m1 1 5 5 5-5' fill='none' stroke='%237A4A2A' stroke-width='1.8'/></svg>") no-repeat right 14px center; }
+
+  .footer { padding: 32px 16px; }
+  .footer__grid { gap: 22px; }
+}
+.product__cta span { margin-left: 6px; }
