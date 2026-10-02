@@ -98,6 +98,7 @@
       const img = this._img;
       img.alt = this.getAttribute('alt') ?? placeholder;
       img.loading = this.hasAttribute('eager') ? 'eager' : 'lazy';
+      if (this.hasAttribute('eager')) img.fetchPriority = 'high';
 
       const src = this.getAttribute('src');
       if (!src) {
