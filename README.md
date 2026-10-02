@@ -45,17 +45,16 @@ block), so the buttons work before the script loads and search engines read
 the real number. **If the number ever changes, update both places:** search
 `index.html` for `9937601505`.
 
-## Before publishing — placeholders from the design
+## Before publishing: still to confirm with the owner
 
-The design marks every unconfirmed detail in square brackets, and they appear
-on the page as written. Search `index.html` for `[` to find them all:
+Unconfirmed details have been taken off the public page. Add them back once
+the owner confirms (search `index.html` for `Not yet answered`):
 
-- `[OWNER NAME]` in "One number for any problem"
-- `[BRANDS]` on the mattress and water purifier cards
-- `[OTHER CATEGORY]` — the eighth category tile and its WhatsApp message
-- `[CONFIRM]` on Home delivery, and `[CONFIRM FREE RADIUS]` in "After you buy"
-- `[MORE VILLAGES]` and `[CONFIRM AREA WITH OWNER]` in "Where we deliver"
-- FAQ answers for EMI, exchange and made-to-order work
+- FAQ answers for EMI, exchange of old furniture, and made-to-order work
+- The wording of the delivery and fitting claims ("Brought and set up",
+  "Delivered to your house")
+- Brand names for mattresses and water purifiers
+- Any extra villages for "Furniture delivery around Umerkote"
 
 ## Customer reviews
 
@@ -128,3 +127,14 @@ site matches the design, and can be added if wanted:
 
 Any static host works — GitHub Pages, Netlify, Cloudflare Pages, or ordinary
 shared hosting. Upload the folder as it is.
+
+## SEO and Google Business Profile
+
+Search setup lives in the `<head>` of `index.html` (title, description,
+canonical, Open Graph, geo tags, two JSON-LD blocks: `FurnitureStore` and
+`FAQPage`), plus `robots.txt` and `sitemap.xml`. The share image is
+`assets/img/og-share.png` (1200 × 630). If the opening hours, rating or
+review count change, update the JSON-LD as well as the visible text.
+
+See `GOOGLE-BUSINESS.md` for the checklist to do in the Google Business
+Profile itself.

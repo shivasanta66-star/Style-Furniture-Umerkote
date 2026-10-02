@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stylefurnitureumerkote.netlify.app/sitemap.xml

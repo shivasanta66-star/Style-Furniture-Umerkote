@@ -194,6 +194,7 @@ summary::-webkit-details-marker { display: none; }
 }
 .lockup__place {
   display: block;
+  white-space: nowrap;
   font-family: var(--fb);
   font-weight: 600;
   font-size: 9px;
@@ -747,6 +748,9 @@ body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
 /* ---------------------------------------------------------------- conversion pass */
 
 .hero__kicker {
+  display: block;
+  font-family: var(--fb);
+  line-height: 1.3;
   margin: 0 0 14px;
   font-size: 13px;
   font-weight: 600;
@@ -802,3 +806,5 @@ body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
   .talk__link { flex: 1 0 100%; min-height: 44px; }
 }
 .hero__dir span { margin-left: 8px; }
+
+.reviews-ask { margin: 14px 0 0; font-size: 14px; color: var(--muted); max-width: 52ch; }
