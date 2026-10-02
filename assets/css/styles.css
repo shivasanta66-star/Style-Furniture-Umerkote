@@ -743,3 +743,62 @@ body { padding-bottom: calc(60px + env(safe-area-inset-bottom)); }
   .footer__grid { gap: 22px; }
 }
 .product__cta span { margin-left: 6px; }
+
+/* ---------------------------------------------------------------- conversion pass */
+
+.hero__kicker {
+  margin: 0 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.hero__dir {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 6px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #FBF7F1;
+  border-bottom: 1px solid var(--brass);
+  align-self: center;
+  line-height: 1.2;
+}
+.hero__dir:hover { color: var(--brass); }
+.hero__dir { border-bottom: 0; text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 6px; }
+.hero__hours [data-open-status] { color: #EBDFCF; font-weight: 500; }
+
+.cat-hint { margin: -8px 0 16px; font-size: 14px; color: var(--muted); }
+
+.talk { background: var(--espresso); padding: 0 20px; }
+.talk__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 40px) 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 32px;
+}
+.talk__text { margin: 0; flex: 1 1 320px; max-width: 46ch; font-family: var(--fh); font-size: clamp(20px, 2.6vw, 24px); line-height: 1.3; color: #FBF7F1; }
+.talk__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.talk__btn { min-height: 48px; padding: 0 24px; font-size: 16px; }
+.talk__link { display: inline-flex; align-items: center; min-height: 48px; padding: 0 6px; font-weight: 600; color: #FBF7F1; text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 6px; }
+.talk__link:hover { color: var(--brass); }
+
+.visit-landmark { margin: -12px 0 20px; font-size: 14px; color: var(--muted); }
+.opt { font-weight: 400; color: #8A7D72; }
+
+@media (max-width: 700px) {
+  .hero__kicker { font-size: 12px; letter-spacing: 1.6px; margin-bottom: 10px; }
+  .hero__dir { flex: 1 0 100%; justify-content: flex-start; min-height: 44px; }
+  .cat-hint { margin-top: -4px; }
+  .talk { padding: 0 16px; }
+  .talk__actions { width: 100%; }
+  .talk__btn { flex: 1 1 0; padding: 0 12px; }
+  .talk__link { flex: 1 0 100%; min-height: 44px; }
+}
+.hero__dir span { margin-left: 8px; }

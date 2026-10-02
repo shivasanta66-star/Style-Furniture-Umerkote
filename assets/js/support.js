@@ -101,6 +101,32 @@ const SITE = {
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
   }
 
+  /* -------------------------------------------------------------- open / closed now */
+
+  // Shop hours: every day 9 AM to 9 PM except Wednesday. Uses the shop's
+  // clock (India time) so a visitor abroad still sees the right answer.
+  function openStatus() {
+    const nodes = $$('[data-open-status]');
+    if (!nodes.length) return;
+    let day, mins;
+    try {
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Kolkata', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false,
+      }).formatToParts(new Date());
+      const get = (t) => parts.find((p) => p.type === t).value;
+      day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
+      mins = (parseInt(get('hour'), 10) % 24) * 60 + parseInt(get('minute'), 10);
+    } catch {
+      return; // keep the static hours line
+    }
+    let text;
+    if (day === 3) text = 'Closed today (Wednesday) · opens Thursday 9 AM';
+    else if (mins >= 540 && mins < 1260) text = 'Open now · until 9 PM';
+    else if (mins < 540) text = 'Opens today at 9 AM';
+    else text = day === 2 ? 'Closed now · next open Thursday 9 AM' : 'Closed now · opens tomorrow 9 AM';
+    nodes.forEach((n) => { n.textContent = text; });
+  }
+
   /* -------------------------------------------------------------- opening hours */
 
   function highlightToday() {
@@ -153,8 +179,7 @@ const SITE = {
       };
       const lines = [
         'Hello Style Furniture,',
-        'Name: ' + v('name'),
-        'Phone: ' + v('phone'),
+        v('name') ? 'Name: ' + v('name') : null,
         'Village: ' + (v('village') || '-'),
         'Looking for: ' + v('item'),
         v('message') ? 'Details: ' + v('message') : null,
@@ -170,6 +195,7 @@ const SITE = {
     showOffer();
     syncHeader();
     highlightToday();
+    openStatus();
     reveal();
     enquiryForm();
   }

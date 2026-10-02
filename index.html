@@ -65,6 +65,7 @@
     </div>
     <div class="hero__shade"></div>
     <div class="hero__content">
+      <p class="hero__kicker">Furniture shop · Umerkote</p>
       <h1 class="hero__title">Sit on it. Lie on it. Then decide.</h1>
       <p class="hero__odia" lang="or">ଭଲ ଦାମ, ଭଲ ଜିନିଷ — ଆପଣଙ୍କ ଘର ପାଇଁ।</p>
       <p class="hero__lede">Sofas, beds, mattresses, almirahs and water purifiers, set out on the shop floor opposite the Block Office, Gulipatna Main Road. Walk in any day but Wednesday, or ask us on the phone first.</p>
@@ -77,8 +78,9 @@
           <svg width="19" height="19" viewBox="0 0 24 24" fill="#0B2E17" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.5-.6a11 11 0 0 1-4.3-3.9c-.3-.5-.8-1.3-.8-2.4 0-1.1.6-1.7.8-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.5-.3.3c-.1.1-.2.3-.1.5.2.4.7 1.2 1.4 1.8.9.8 1.6 1.1 1.9 1.2.2.1.4.1.6-.1l.7-.9c.2-.2.3-.2.6-.1l1.8.9c.3.1.4.2.5.3 0 .1 0 .5-.2 1.1Z"/></svg>
           WhatsApp Us
         </a>
+        <a class="hero__dir" href="https://maps.app.goo.gl/Ej5kVxfLn61TXxsT6" target="_blank" rel="noopener">Get directions <span aria-hidden="true">→</span></a>
       </div>
-      <p class="hero__hours"><span class="stars" aria-hidden="true">★★★★★</span> 5.0 from 26 Google reviews<span class="hero__sep" aria-hidden="true">/</span>Open 9 AM – 9 PM, closed Wednesday</p>
+      <p class="hero__hours"><span class="stars" aria-hidden="true">★★★★★</span> 5.0 from 26 Google reviews<span class="hero__sep" aria-hidden="true">/</span><span data-open-status>Open 9 AM – 9 PM, closed Wednesday</span></p>
     </div>
   </section>
 
@@ -94,6 +96,7 @@
   <section class="section" id="categories">
     <div class="container">
       <div class="sec-head"><h2 class="h2">Shop by category</h2><p class="odia" lang="or">ସାମଗ୍ରୀ ଦେଖନ୍ତୁ</p></div>
+      <p class="cat-hint">Tap any category to ask about it on WhatsApp. No obligation.</p>
       <div class="cat-grid">
         <a class="cat-card cat-card--feature" data-reveal data-wa="Hi, I want to see Sofas at Style Furniture." href="https://wa.me/919937601505" target="_blank" rel="noopener">
           <div class="media"><image-slot shape="rect" placeholder="Fabric sofa set on the showroom floor" src="assets/img/illustrations/cat-sofa.svg"></image-slot></div>
@@ -268,6 +271,17 @@
     </div>
   </section>
 
+  <section class="talk" aria-label="Contact">
+    <div class="talk__inner">
+      <p class="talk__text">Not sure what fits your room? Tell us the size and what you need. We will say what we have.</p>
+      <div class="talk__actions">
+        <a class="btn btn--teak talk__btn" data-tel href="tel:+919937601505">Call us</a>
+        <a class="btn btn--wa talk__btn" data-wa="Hi Style Furniture, I have a question." href="https://wa.me/919937601505" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="talk__link" href="https://maps.app.goo.gl/Ej5kVxfLn61TXxsT6" target="_blank" rel="noopener">Directions</a>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="delivery">
     <div class="container">
       <div class="sec-head"><h2 class="h2">Where we deliver</h2><p class="odia mb-22" lang="or">ଘରକୁ ପହଞ୍ଚାଇବା</p></div>
@@ -318,6 +332,7 @@
           <h3 class="h3 visit-name">Style Furniture</h3>
           <p class="visit-address">In front of the Block Office, Gulipatna Main Road,<br>Gulipatna, Umerkote, Odisha 764073</p>
           <p class="visit-phone">Phone <a class="link-brass" data-tel href="tel:+919937601505"><span data-phone-label>+91 99376 01505</span></a></p>
+          <p class="visit-landmark">Landmark: in front of the Block Office, on the main road.</p>
           <table class="hours" data-hours>
             <caption>Opening hours</caption>
             <tbody>
@@ -338,13 +353,10 @@
   <section class="section section--oat" id="enquiry">
     <div class="container container--720">
       <div class="sec-head"><h2 class="h2">Tell us what you need</h2><p class="odia mb-6" lang="or">ଆମକୁ ଲେଖନ୍ତୁ</p></div>
-      <p class="enquiry-intro">Fill this and it opens WhatsApp with your message already typed. Nothing is stored on the website.</p>
+      <p class="enquiry-intro">Pick what you are looking for and it opens WhatsApp with the message already typed. WhatsApp already shows us your number, and nothing is stored on this website.</p>
       <form class="form" data-enquiry>
         <label class="field">Your name
-          <input name="name" required placeholder="Name" autocomplete="name">
-        </label>
-        <label class="field">Phone number
-          <input name="phone" type="tel" required placeholder="10 digit number" autocomplete="tel" inputmode="tel">
+          <input name="name" placeholder="Name (optional)" autocomplete="name">
         </label>
         <label class="field">Village or town
           <input name="village" placeholder="Where you stay">
