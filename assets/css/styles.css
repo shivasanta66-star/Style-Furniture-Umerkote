@@ -509,6 +509,31 @@ summary::-webkit-details-marker { display: none; }
 .hours .is-today td { border-radius: 0 8px 8px 0; }
 .hours__today { font-size: 12px; font-weight: 600; color: var(--teak); }
 
+/* Row hover: the day name slides right and a brass dot appears in the gap. */
+.hours th { position: relative; transition: transform .25s ease; }
+.hours th::before {
+  content: "";
+  position: absolute;
+  left: -14px; top: 50%;
+  width: 7px; height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--brass);
+  opacity: 0;
+  transform: scale(.4);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.hours td { transition: transform .25s ease; }
+.hours tr:hover th,
+.hours tr:focus-within th { transform: translateX(14px); }
+.hours tr:hover td { transform: translateX(-4px); }
+.hours tr:hover th::before,
+.hours tr:focus-within th::before { opacity: 1; transform: scale(1); }
+.hours .is-closed th::before { background: var(--muted); }
+@media (prefers-reduced-motion: reduce) {
+  .hours th, .hours td, .hours th::before { transition: none; }
+}
+
 /* ---------------------------------------------------------------- enquiry form */
 
 .enquiry-intro { margin: 0 0 24px; font-size: 15px; }
