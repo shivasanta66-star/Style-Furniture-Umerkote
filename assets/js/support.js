@@ -167,9 +167,9 @@ const SITE = {
 
   /* -------------------------------------------------------------- scroll reveal */
 
-  // Products and sleep cards fade up and categories scale in as they enter the screen.
+  // Products, sleep cards and reviews fade up and categories scale in as they enter the screen.
   function scrollReveal() {
-    const items = document.querySelectorAll('.product, .cat-card, .sleep-card');
+    const items = document.querySelectorAll('.product, .cat-card, .sleep-card, .review');
     if (!items.length || !('IntersectionObserver' in window)) return;
     document.documentElement.classList.add('js-reveal');
     const io = new IntersectionObserver((entries) => {
