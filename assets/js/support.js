@@ -169,7 +169,7 @@ const SITE = {
 
   // Products, sleep cards and reviews fade up and categories scale in as they enter the screen.
   function scrollReveal() {
-    const items = document.querySelectorAll('.product, .cat-card, .sleep-card, .review, .faq');
+    const items = document.querySelectorAll('.product, .cat-card, .sleep-card, .review, .faq, .visit-grid > div');
     if (!items.length || !('IntersectionObserver' in window)) return;
     document.documentElement.classList.add('js-reveal');
     const io = new IntersectionObserver((entries) => {
