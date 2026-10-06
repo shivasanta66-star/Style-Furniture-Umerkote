@@ -176,6 +176,8 @@ const SITE = {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
         e.target.classList.add('is-revealed');
+        // Once the entrance has played, hover effects may take over the transform.
+        setTimeout(() => e.target.classList.add('is-settled'), 1500);
         io.unobserve(e.target);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -90px 0px' });
@@ -184,6 +186,26 @@ const SITE = {
       const sibs = Array.prototype.indexOf.call(el.parentNode.children, el);
       el.style.setProperty('--reveal-delay', Math.min(sibs, 5) * 140 + 'ms');
       io.observe(el);
+    });
+  }
+
+  /* -------------------------------------------------------------- product tilt */
+
+  // The card leans toward the pointer; CSS applies it only while hovered.
+  function productTilt() {
+    if (!window.matchMedia('(hover: hover)').matches) return;
+    document.querySelectorAll('.product').forEach((card) => {
+      card.addEventListener('pointermove', (ev) => {
+        const r = card.getBoundingClientRect();
+        const x = (ev.clientX - r.left) / r.width - 0.5;
+        const y = (ev.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty('--ry', (x * 8).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.removeProperty('--rx');
+        card.style.removeProperty('--ry');
+      });
     });
   }
 
@@ -197,6 +219,7 @@ const SITE = {
     openStatus();
     enquiryForm();
     scrollReveal();
+    productTilt();
   }
 
   if (document.readyState === 'loading') {
