@@ -527,6 +527,7 @@ summary::-webkit-details-marker { display: none; }
 .hours tr:hover th,
 .hours tr:focus-within th { transform: translateX(14px); }
 .hours tr:hover td { transform: translateX(-4px); }
+.hours tr:hover:not(.is-today) { background: rgba(122, 74, 42, .06); }
 .hours tr:hover th::before,
 .hours tr:focus-within th::before { opacity: 1; transform: scale(1); }
 .hours .is-closed th::before { background: var(--muted); }
