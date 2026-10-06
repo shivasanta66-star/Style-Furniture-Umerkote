@@ -354,6 +354,32 @@ summary::-webkit-details-marker { display: none; }
 .product__cta span { margin-left: 6px; }
 .product__cta:hover { color: var(--teak-dark); text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 4px; }
 
+/* Product hover: the card lifts and tilts toward the pointer, the picture zooms.
+   Tilt angles (--rx, --ry) are set by script; lift and zoom work without it.
+   While the scroll reveal runs, .is-settled is not yet set, so hover waits. */
+.product { position: relative; isolation: isolate; }
+.product::before {
+  content: "";
+  position: absolute;
+  inset: 6px -14px;
+  z-index: -1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .75);
+  box-shadow: 0 18px 40px -12px rgba(60, 38, 20, .35);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .product { transition: transform .25s ease-out; }
+  .product:hover {
+    transform: perspective(900px) translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  }
+  .product:hover::before { opacity: 1; }
+  .product .media > * { transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .product:hover .media > * { transform: scale(1.12); }
+  .product:not(:hover) { --rx: 0deg; --ry: 0deg; }
+}
+
 /* Scroll reveal: .js-reveal is added by script, so without JS nothing is hidden.
    Product entries, sleep cards, reviews, FAQs and the visit columns fade up (the lead review scales in), their pictures and firmness bars
    scale in; category tiles scale in. */
@@ -394,6 +420,13 @@ summary::-webkit-details-marker { display: none; }
 .js-reveal .visit-grid > div.is-revealed { opacity: 1; transform: none; }
 .js-reveal .product.is-revealed .media,
 .js-reveal .sleep-card.is-revealed .firm { transform: none; }
+/* After the reveal finishes, hand the card back to its hover transition. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .js-reveal .product.is-settled { transition: transform .25s ease-out, opacity .3s ease; transition-delay: 0ms; }
+  .js-reveal .product.is-settled:hover {
+    transform: perspective(900px) translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .js-reveal .product, .js-reveal .cat-card, .js-reveal .sleep-card, .js-reveal .review, .js-reveal .faq, .js-reveal .visit-grid > div,
   .js-reveal .product .media, .js-reveal .sleep-card .firm {
