@@ -165,6 +165,28 @@ const SITE = {
     });
   }
 
+  /* -------------------------------------------------------------- scroll reveal */
+
+  // Products fade up and categories scale in as they enter the screen.
+  function scrollReveal() {
+    const items = document.querySelectorAll('.product, .cat-card');
+    if (!items.length || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('js-reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-revealed');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    items.forEach((el) => {
+      // Stagger neighbours that appear together.
+      const sibs = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.setProperty('--reveal-delay', Math.min(sibs, 5) * 70 + 'ms');
+      io.observe(el);
+    });
+  }
+
   /* -------------------------------------------------------------- boot */
 
   function boot() {
@@ -174,6 +196,7 @@ const SITE = {
     highlightToday();
     openStatus();
     enquiryForm();
+    scrollReveal();
   }
 
   if (document.readyState === 'loading') {
