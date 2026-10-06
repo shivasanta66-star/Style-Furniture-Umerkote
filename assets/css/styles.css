@@ -355,19 +355,21 @@ summary::-webkit-details-marker { display: none; }
 .product__cta:hover { color: var(--teak-dark); text-decoration: underline; text-decoration-color: var(--brass); text-underline-offset: 4px; }
 
 /* Scroll reveal: .js-reveal is added by script, so without JS nothing is hidden.
-   Product entries, sleep cards and reviews fade up (the lead review scales in), their pictures and firmness bars
+   Product entries, sleep cards, reviews and FAQs fade up (the lead review scales in), their pictures and firmness bars
    scale in; category tiles scale in. */
 .js-reveal .product,
 .js-reveal .cat-card,
 .js-reveal .sleep-card,
-.js-reveal .review {
+.js-reveal .review,
+.js-reveal .faq {
   opacity: 0;
   transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
   transition-delay: var(--reveal-delay, 0ms);
 }
 .js-reveal .product,
 .js-reveal .sleep-card,
-.js-reveal .review { transform: translateY(28px); }
+.js-reveal .review,
+.js-reveal .faq { transform: translateY(28px); }
 .js-reveal .review--lead { transform: scale(.94); transform-origin: left top; }
 .js-reveal .cat-card { transform: scale(.92); }
 .js-reveal .product .media {
@@ -384,11 +386,12 @@ summary::-webkit-details-marker { display: none; }
 .js-reveal .product.is-revealed,
 .js-reveal .cat-card.is-revealed,
 .js-reveal .sleep-card.is-revealed,
-.js-reveal .review.is-revealed { opacity: 1; transform: none; }
+.js-reveal .review.is-revealed,
+.js-reveal .faq.is-revealed { opacity: 1; transform: none; }
 .js-reveal .product.is-revealed .media,
 .js-reveal .sleep-card.is-revealed .firm { transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .js-reveal .product, .js-reveal .cat-card, .js-reveal .sleep-card, .js-reveal .review,
+  .js-reveal .product, .js-reveal .cat-card, .js-reveal .sleep-card, .js-reveal .review, .js-reveal .faq,
   .js-reveal .product .media, .js-reveal .sleep-card .firm {
     opacity: 1; transform: none; transition: none;
   }
