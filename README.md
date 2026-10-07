@@ -54,10 +54,8 @@ the owner confirms (search `index.html` for `Not yet answered`):
 ## Customer reviews
 
 The four review cards quote the shop's Google Maps listing word for word, with
-the reviewers' own spelling. Three show the reviewer's name as it appears on
-Google. The fourth ("Water purifier best price in style furnutre") is a
-highlight Google shows without naming its reviewer, so it is credited only to
-"Google review".
+the reviewers' own spelling, and each shows the reviewer's name as it appears
+on Google.
 
 Signed-out visitors to Google Maps see only three full reviews, which is why
 those three are used. To feature others, copy them from the listing while
