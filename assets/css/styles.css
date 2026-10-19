@@ -381,7 +381,7 @@ summary::-webkit-details-marker { display: none; }
 }
 
 /* Scroll reveal: .js-reveal is added by script, so without JS nothing is hidden.
-   Product entries, sleep cards, reviews, FAQs and the visit columns fade up (the lead review scales in), their pictures and firmness bars
+   Product entries, sleep cards, reviews, FAQs and the visit columns fade up, their pictures and firmness bars
    scale in; category tiles scale in. */
 .js-reveal .product,
 .js-reveal .cat-card,
@@ -399,7 +399,6 @@ summary::-webkit-details-marker { display: none; }
 .js-reveal .faq,
 .js-reveal .visit-grid > div { transform: translateY(70px) scale(.96); }
 .js-reveal .visit-grid > div:first-child { transform: scale(.8); transform-origin: left top; }
-.js-reveal .review--lead { transform: scale(.82); transform-origin: left top; }
 .js-reveal .cat-card { transform: scale(.78); }
 .js-reveal .product .media {
   transform: scale(.6);
@@ -501,14 +500,11 @@ summary::-webkit-details-marker { display: none; }
 .reviews-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-bottom: 6px; }
 .reviews-head__count { font-size: 15px; color: var(--muted); }
 
-/* One review set large, the rest as plain typeset lines. */
+/* All reviews set at the same size and colour. */
 .review-grid { display: grid; grid-template-columns: 1fr; gap: 28px 36px; margin-top: 28px; }
 .review { margin: 0; padding-top: 14px; border-top: 2px solid var(--brass); }
 .review p { margin: 0 0 10px; font-family: var(--fh); font-size: 18px; line-height: 1.35; }
 .review footer { font-size: 13px; color: var(--muted); }
-.review--lead { grid-column: 1 / -1; padding-top: 0; border-top: 0; }
-.review--lead p { max-width: 22ch; font-size: clamp(26px, 8vw, 34px); line-height: 1.12; letter-spacing: -0.01em; color: var(--teak); }
-.review--lead footer { font-size: 14px; }
 .reviews-link { margin-top: 28px; font-weight: 600; border-bottom: 2px solid var(--brass); }
 .reviews-ask { margin: 14px 0 0; max-width: 52ch; font-size: 14px; color: var(--muted); }
 
@@ -716,9 +712,8 @@ summary::-webkit-details-marker { display: none; }
   .product { grid-template-columns: minmax(110px, 38%) 1fr; gap: 18px; padding: 20px 0; }
   .product .h3 { font-size: 20px; }
   .product__desc { font-size: 15px; }
-  .review-grid { grid-template-columns: repeat(3, 1fr); }
+  .review-grid { grid-template-columns: repeat(2, 1fr); }
   .review p { font-size: 19px; }
-  .review--lead p { font-size: clamp(32px, 4.6vw, 46px); }
   .map iframe { height: 320px; }
   .directions { width: auto; }
   .form__submit { width: auto; justify-self: start; }
@@ -731,6 +726,7 @@ summary::-webkit-details-marker { display: none; }
 
 @media (min-width: 900px) {
   .header__inner { flex-wrap: nowrap; }
+  .review-grid { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 899px) {
   .nav { order: 3; width: 100%; }
