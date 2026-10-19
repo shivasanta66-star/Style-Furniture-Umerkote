@@ -372,11 +372,11 @@ summary::-webkit-details-marker { display: none; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .product { transition: transform .25s ease-out; }
   .product:hover {
-    transform: perspective(900px) translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transform: perspective(900px) translateY(-4px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   }
   .product:hover::before { opacity: 1; }
   .product .media > * { transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .product:hover .media > * { transform: scale(1.12); }
+  .product:hover .media > * { transform: scale(1.06); }
   .product:not(:hover) { --rx: 0deg; --ry: 0deg; }
 }
 
@@ -397,16 +397,16 @@ summary::-webkit-details-marker { display: none; }
 .js-reveal .sleep-card,
 .js-reveal .review,
 .js-reveal .faq,
-.js-reveal .visit-grid > div { transform: translateY(70px) scale(.96); }
-.js-reveal .visit-grid > div:first-child { transform: scale(.8); transform-origin: left top; }
-.js-reveal .cat-card { transform: scale(.78); }
+.js-reveal .visit-grid > div { transform: translateY(35px) scale(.98); }
+.js-reveal .visit-grid > div:first-child { transform: scale(.9); transform-origin: left top; }
+.js-reveal .cat-card { transform: scale(.89); }
 .js-reveal .product .media {
-  transform: scale(.6);
+  transform: scale(.8);
   transition: transform 1s cubic-bezier(.16, .84, .3, 1);
   transition-delay: calc(var(--reveal-delay, 0ms) + 200ms);
 }
 .js-reveal .sleep-card .firm {
-  transform: scale(.5);
+  transform: scale(.75);
   transform-origin: left center;
   transition: transform 1s cubic-bezier(.16, .84, .3, 1);
   transition-delay: calc(var(--reveal-delay, 0ms) + 200ms);
@@ -423,7 +423,7 @@ summary::-webkit-details-marker { display: none; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .js-reveal .product.is-settled { transition: transform .25s ease-out, opacity .3s ease; transition-delay: 0ms; }
   .js-reveal .product.is-settled:hover {
-    transform: perspective(900px) translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transform: perspective(900px) translateY(-4px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -601,8 +601,8 @@ summary::-webkit-details-marker { display: none; }
 }
 .hours td { transition: transform .25s ease; }
 .hours tr:hover th,
-.hours tr:focus-within th { transform: translateX(14px); }
-.hours tr:hover td { transform: translateX(-4px); }
+.hours tr:focus-within th { transform: translateX(7px); }
+.hours tr:hover td { transform: translateX(-2px); }
 .hours tr:hover:not(.is-today) { background: rgba(122, 74, 42, .06); }
 .hours tr:hover th::before,
 .hours tr:focus-within th::before { opacity: 1; transform: scale(1); }
