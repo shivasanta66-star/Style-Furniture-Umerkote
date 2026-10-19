@@ -199,8 +199,8 @@ const SITE = {
         const r = card.getBoundingClientRect();
         const x = (ev.clientX - r.left) / r.width - 0.5;
         const y = (ev.clientY - r.top) / r.height - 0.5;
-        card.style.setProperty('--ry', (x * 8).toFixed(2) + 'deg');
-        card.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
+        card.style.setProperty('--ry', (x * 4).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 4).toFixed(2) + 'deg');
       });
       card.addEventListener('pointerleave', () => {
         card.style.removeProperty('--rx');
